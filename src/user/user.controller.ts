@@ -3,13 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FormDataRequest } from 'nestjs-form-data';
+import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CreateUserDTO } from './dto/createUser.dto';
 import { DeleteUserDTO } from './dto/deleteUser.dto';
 import { GetAllUsersDTO } from './dto/getUser.dto';
@@ -25,6 +29,7 @@ export class UserController {
   @ApiOperation({ summary: 'user creation' })
   @ApiResponse({ status: 200, description: 'user', type: User })
   @FormDataRequest()
+  @UsePipes(ValidationPipe)
   @Get()
   getAllUsers(@Query() dto: GetAllUsersDTO) {
     const result = this.userService.getAllUsers(dto);
@@ -36,12 +41,16 @@ export class UserController {
   @FormDataRequest()
   @Get('/:id')
   getUser(@Param('id') id: string) {
-    const result = this.userService.getUser({ id: Number(id) });
+    if (Number.isNaN(Number(id))) {
+      throw new HttpException('param must be number', HttpStatus.BAD_REQUEST);
+    }
+    const result = this.userService.findOneUserById({ id: Number(id) });
     return result;
   }
 
   @ApiOperation({ summary: 'user creation' })
   @ApiResponse({ status: 200, description: 'user', type: User })
+  @UsePipes(ValidationPipe)
   @FormDataRequest()
   @Post()
   createUser(@Body() dto: CreateUserDTO) {
@@ -50,6 +59,7 @@ export class UserController {
   }
   @ApiOperation({ summary: 'user update' })
   @ApiResponse({ status: 200, description: 'user', type: User })
+  @UsePipes(ValidationPipe)
   @FormDataRequest()
   @Patch('/:id')
   updateUser(@Body() dto: UpdateUserBodyDTO, @Param('id') id: string) {
@@ -58,6 +68,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'user creation' })
+  @UsePipes(ValidationPipe)
   @ApiResponse({ status: 200 })
   @Delete()
   deleteUser(@Body() dto: DeleteUserDTO) {

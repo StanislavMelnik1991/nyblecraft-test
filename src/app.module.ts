@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { FilesModule } from './files/files.module';
+import { PdfModule } from './pdf/pdf.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FilesModule } from './files/files.module';
     }),
     UserModule,
     FilesModule,
+    PdfModule,
   ],
   controllers: [],
   providers: [],

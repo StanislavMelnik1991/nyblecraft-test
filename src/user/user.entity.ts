@@ -30,12 +30,12 @@ export class User extends BaseEntity {
   lastName: string;
 
   @ApiProperty({ example: 'path.jpeg', description: 'image url' })
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   img: string;
 
-  @ApiProperty({ description: 'is pdf created?' })
-  @Column({ nullable: false, default: false })
-  pdf: boolean;
+  @ApiProperty({ example: 'path.pdf', description: 'pdf url' })
+  @Column({ nullable: true })
+  pdf: string;
 
   @CreateDateColumn()
   createdAt: Date;

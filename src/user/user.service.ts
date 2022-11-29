@@ -4,7 +4,7 @@ import { FilesService } from 'src/files/files.service';
 import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/createUser.dto';
 import { DeleteUserDTO } from './dto/deleteUser.dto';
-import { GetAllUsersDTO, GetOneUserDTO } from './dto/getUser.dto';
+import { GetAllUsersDTO } from './dto/getUser.dto';
 import { UpdateUserBodyDTO } from './dto/updateUser.dto';
 import { User } from './user.entity';
 
@@ -27,6 +27,7 @@ export class UserService {
     user = await this.usersRepository.save(user);
     return user;
   }
+
   async getAllUsers({ limit, offset }: GetAllUsersDTO) {
     const [users, count] = await this.usersRepository.findAndCount({
       take: limit,
@@ -35,8 +36,17 @@ export class UserService {
     });
     return { users, count };
   }
-  async getUser({ id }: GetOneUserDTO) {
+
+  async findOneUserById({ id }: { id: number }) {
     const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
+  }
+
+  async findOneUserByEmail(email: string) {
+    const user = await this.usersRepository.findOneBy({ email });
     if (!user) {
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     }
@@ -57,7 +67,7 @@ export class UserService {
     { email, firstName, img, lastName }: UpdateUserBodyDTO,
     id: number,
   ) {
-    const user = await this.getUser({ id });
+    const user = await this.findOneUserById({ id });
     if (firstName) {
       user.firstName = firstName;
     }

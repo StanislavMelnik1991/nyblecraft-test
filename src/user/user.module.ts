@@ -13,6 +13,7 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
     FilesModule,
     NestjsFormDataModule,
   ],
+  exports: [UserService],
   controllers: [UserController],
 })
 export class UserModule {}
