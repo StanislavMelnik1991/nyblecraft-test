@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "db:up": "docker-compose up",
-    "db:down": "docker-compose down",
+    "server:up": "docker-compose up",
+    "server:down": "docker-compose down",
     "start:dev": "nest start --watch",
     "prebuild": "rimraf dist",
     "build": "nest build",

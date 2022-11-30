@@ -26,7 +26,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @ApiOperation({ summary: 'user creation' })
+  @ApiOperation({ summary: 'get all users' })
   @ApiResponse({ status: 200, description: 'user', type: User })
   @FormDataRequest()
   @UsePipes(ValidationPipe)
@@ -36,7 +36,7 @@ export class UserController {
     return result;
   }
 
-  @ApiOperation({ summary: 'user creation' })
+  @ApiOperation({ summary: 'get user with {id}' })
   @ApiResponse({ status: 200, description: 'user', type: User })
   @FormDataRequest()
   @Get('/:id')
@@ -48,7 +48,7 @@ export class UserController {
     return result;
   }
 
-  @ApiOperation({ summary: 'user creation' })
+  @ApiOperation({ summary: 'create user' })
   @ApiResponse({ status: 200, description: 'user', type: User })
   @UsePipes(ValidationPipe)
   @FormDataRequest()
@@ -67,7 +67,7 @@ export class UserController {
     return user;
   }
 
-  @ApiOperation({ summary: 'user creation' })
+  @ApiOperation({ summary: 'delete user' })
   @UsePipes(ValidationPipe)
   @ApiResponse({ status: 200 })
   @Delete()

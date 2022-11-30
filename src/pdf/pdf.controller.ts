@@ -9,7 +9,7 @@ import { PdfService } from './pdf.service';
 @Controller('api/pdf')
 export class PdfController {
   constructor(private pdfService: PdfService) {}
-  @ApiOperation({ summary: 'user creation' })
+  @ApiOperation({ summary: 'create pdf for user with {id}' })
   @ApiResponse({ status: 200, description: 'user', type: User })
   @UsePipes(ValidationPipe)
   @Post()
