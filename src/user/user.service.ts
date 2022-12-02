@@ -17,6 +17,13 @@ export class UserService {
   ) {}
 
   async createUser({ email, firstName, lastName, img }: CreateUserDTO) {
+    const duplicate = await this.usersRepository.findOneBy({ email });
+    if (duplicate) {
+      throw new HttpException(
+        'user with this email already exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     const savedImage = await this.fileService.createImage(img);
     let user = this.usersRepository.create({
       email,

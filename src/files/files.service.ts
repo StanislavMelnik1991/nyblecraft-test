@@ -12,18 +12,19 @@ export class FilesService {
       const fileName = `${v1()}.${file.extension}`;
       const filePath = resolve(__dirname, '..', 'static', 'img');
       mkdir(filePath, { recursive: true }, (err) => {
-        if (err)
+        if (err) {
           throw new HttpException(
             err.message,
             HttpStatus.INTERNAL_SERVER_ERROR,
           );
-      });
-      writeFile(join(filePath, fileName), file.buffer, (err) => {
-        if (err)
-          throw new HttpException(
-            err.message,
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
+        }
+        writeFile(join(filePath, fileName), file.buffer, (err) => {
+          if (err)
+            throw new HttpException(
+              err.message,
+              HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        });
       });
       return fileName;
     } catch (e: any) {
@@ -58,32 +59,34 @@ export class FilesService {
       const pdfFileName = `${v1()}.pdf`;
       const pdfFilePath = resolve(__dirname, '..', 'static', 'pdf');
       mkdir(pdfFilePath, { recursive: true }, (err) => {
-        if (err)
+        if (err) {
           throw new HttpException(
             err.message,
             HttpStatus.INTERNAL_SERVER_ERROR,
           );
-      });
-      const doc = {
-        content: `
-        <h1>${name}<br>${lastName}</h1>
-        <img src="http://localhost:${process.env.PORT}/img/${img}">
-        `,
-      };
-      generatePdf(doc, { format: 'A4' }, (err, buffer) => {
-        if (err)
-          throw new HttpException(
-            err.message,
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
-        writeFile(join(pdfFilePath, pdfFileName), buffer, (err) => {
+        }
+        const doc = {
+          content: `
+          <h1>${name}<br>${lastName}</h1>
+          <img src="http://localhost:${process.env.PORT}/img/${img}">
+          `,
+        };
+        generatePdf(doc, { format: 'A4' }, (err, buffer) => {
           if (err)
             throw new HttpException(
               err.message,
               HttpStatus.INTERNAL_SERVER_ERROR,
             );
+          writeFile(join(pdfFilePath, pdfFileName), buffer, (err) => {
+            if (err)
+              throw new HttpException(
+                err.message,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+              );
+          });
         });
       });
+
       return pdfFileName;
     } catch (e: any) {
       throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
