@@ -18,12 +18,13 @@ let FilesService = class FilesService {
             const fileName = `${(0, uuid_1.v1)()}.${file.extension}`;
             const filePath = (0, path_1.resolve)(__dirname, '..', 'static', 'img');
             (0, fs_1.mkdir)(filePath, { recursive: true }, (err) => {
-                if (err)
+                if (err) {
                     throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-            });
-            (0, fs_1.writeFile)((0, path_1.join)(filePath, fileName), file.buffer, (err) => {
-                if (err)
-                    throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                (0, fs_1.writeFile)((0, path_1.join)(filePath, fileName), file.buffer, (err) => {
+                    if (err)
+                        throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+                });
             });
             return fileName;
         }
@@ -49,21 +50,22 @@ let FilesService = class FilesService {
             const pdfFileName = `${(0, uuid_1.v1)()}.pdf`;
             const pdfFilePath = (0, path_1.resolve)(__dirname, '..', 'static', 'pdf');
             (0, fs_1.mkdir)(pdfFilePath, { recursive: true }, (err) => {
-                if (err)
+                if (err) {
                     throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-            });
-            const doc = {
-                content: `
-        <h1>${name}<br>${lastName}</h1>
-        <img src="http://localhost:${process.env.PORT}/img/${img}">
-        `,
-            };
-            (0, html_pdf_node_1.generatePdf)(doc, { format: 'A4' }, (err, buffer) => {
-                if (err)
-                    throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-                (0, fs_1.writeFile)((0, path_1.join)(pdfFilePath, pdfFileName), buffer, (err) => {
+                }
+                const doc = {
+                    content: `
+          <h1>${name}<br>${lastName}</h1>
+          <img src="http://localhost:${process.env.PORT}/img/${img}">
+          `,
+                };
+                (0, html_pdf_node_1.generatePdf)(doc, { format: 'A4' }, (err, buffer) => {
                     if (err)
                         throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+                    (0, fs_1.writeFile)((0, path_1.join)(pdfFilePath, pdfFileName), buffer, (err) => {
+                        if (err)
+                            throw new common_1.HttpException(err.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+                    });
                 });
             });
             return pdfFileName;
